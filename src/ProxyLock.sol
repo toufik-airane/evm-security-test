@@ -38,8 +38,8 @@ contract ProxyLock {
 
     /// @notice call the callYou() function of the contract passed as parameter
     /// @param you the address of the contract to call
-    function callYou(address you) external unlocked {
-        if (you.code.length == 0) {
+    function callYou(address you) external {
+        if (you.code.length != 0) {
             revert NotAContract();
         }
         _locked = false;
