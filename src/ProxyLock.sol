@@ -45,7 +45,7 @@ contract ProxyLock {
         _locked = false;
         // I am calling the callYou() function of the contract at address $you
         // what could go wrong??
-        you.call("callYou()");
+        you.call(abi.encode("callYou()"));
         _locked = true;
     }
 
